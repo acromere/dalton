@@ -38,7 +38,7 @@ jobs:
       - name: Fetch CI/CD resources
         uses: actions/checkout@v6
         with:
-          repository: marksoderquist/cicd
+          repository: acromere/cicd
           path: .github
 
       - name: Configuration
@@ -65,11 +65,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4
-        with:
-          languages: java
-
       - name: Compile
         run: |
           mvn ${{env.MAVEN_PARMS}} compile
@@ -78,10 +73,7 @@ jobs:
         run: |
           mvn ${{env.MAVEN_PARMS}} test
 
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v4
-
-      - name: Deploy Arifacts
+      - name: Deploy Artifacts
         run: |
           mvn ${{env.MAVEN_PARMS}} deploy -Dmaven.test.skip=true
 
@@ -92,9 +84,9 @@ jobs:
 #
 #      - name: Deploy JavaDoc
 #        run: |
-#          ssh -t ${{env.MVS_REPO_USERNAME}}@avereon.com "mkdir -p ${{env.JAVADOC_DEPLOY_PATH}};"
+#          ssh -t ${{env.MVS_REPO_USERNAME}}@acromere.com "mkdir -p ${{env.JAVADOC_DEPLOY_PATH}};"
 #          if [ $? -ne 0 ]; then exit 1; fi
-#          scp -B target/${MVS_PRODUCT}-*-javadoc.jar ${{env.MVS_REPO_USERNAME}}@avereon.com:${{env.JAVADOC_DEPLOY_PATH}}/javadoc.jar 2>&1
+#          scp -B target/${MVS_PRODUCT}-*-javadoc.jar ${{env.MVS_REPO_USERNAME}}@acromere.com:${{env.JAVADOC_DEPLOY_PATH}}/javadoc.jar 2>&1
 #          if [ $? -ne 0 ]; then exit 1; fi
-#          ssh -t ${{env.MVS_REPO_USERNAME}}@avereon.com "mkdir -p ${{env.JAVADOC_TARGET_PATH}};rm -rf ${{env.JAVADOC_TARGET_PATH}}/*;unzip -o ${{env.JAVADOC_DEPLOY_PATH}}/javadoc.jar -d ${{env.JAVADOC_TARGET_PATH}}"
+#          ssh -t ${{env.MVS_REPO_USERNAME}}@acromere.com "mkdir -p ${{env.JAVADOC_TARGET_PATH}};rm -rf ${{env.JAVADOC_TARGET_PATH}}/*;unzip -o ${{env.JAVADOC_DEPLOY_PATH}}/javadoc.jar -d ${{env.JAVADOC_TARGET_PATH}}"
 #          if [ $? -ne 0 ]; then exit 1; fi
